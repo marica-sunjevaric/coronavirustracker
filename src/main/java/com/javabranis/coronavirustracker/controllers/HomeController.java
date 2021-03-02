@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Controller
@@ -21,8 +22,12 @@ public class HomeController {
         int totalReportedCases = allStats.stream().mapToInt(stat -> stat.getLatestTotalCases()).sum();
         int totalNewCases = allStats.stream().mapToInt(stat -> stat.getDiffFromPrevDay()).sum();
         model.addAttribute("locationStats", allStats);
-        model.addAttribute("totalReportedCases", totalReportedCases);
-        model.addAttribute("totalNewCases", totalNewCases);
+        model.addAttribute("totalReportedCases", formatNumbers(totalReportedCases));
+        model.addAttribute("totalNewCases", formatNumbers(totalNewCases));
         return "home";
+    }
+    public String formatNumbers (int value) {
+        DecimalFormat df = new DecimalFormat("###,###,###");
+        return df.format(value);
     }
 }
